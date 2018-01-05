@@ -199,4 +199,14 @@
         android:onClick="syncDelButtonClicked"
         android:text="syncdel" />
 
+    <Button
+        android:id="@+id/prefButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView5"
+        android:onClick="prefButtonClicked"
+        android:text="pref" />
+
 </RelativeLayout>

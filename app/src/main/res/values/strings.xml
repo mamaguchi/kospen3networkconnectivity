@@ -30,4 +30,7 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string name="pref_sync_wifi">Update on WiFi</string>
+    <string name="pref_sync_wifi_summ">To allow app to update when Wifi is available</string>
 </resources>

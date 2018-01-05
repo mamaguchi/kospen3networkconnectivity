@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <!-- Required because we're retrieving accounts. -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Required to allow application to access info about networks -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
 
     <application
         android:allowBackup="true"
@@ -25,6 +28,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +37,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ApiResultActivity"></activity>
+
+        <activity android:name=".SettingsActivity" android:label=".SettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
 
         <provider
             android:name=".KospenusersProvider"
@@ -69,7 +84,7 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".ApiResultActivity"></activity>
+
     </application>
 
 </manifest>

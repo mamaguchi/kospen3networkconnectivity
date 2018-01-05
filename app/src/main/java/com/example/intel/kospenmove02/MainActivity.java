@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button syncGetButton;
     private Button syncPostButton;
     private Button syncDelButton;
+    private Button prefButton;
 
     private MyDBHandler dbHandler;
 
@@ -75,11 +77,24 @@ public class MainActivity extends AppCompatActivity {
         /* Create the dummy account */
         CreateSyncAccount(this);
 
+        /* prefButton to show preference activity */
+        prefButton = (Button) findViewById(R.id.prefButtonId);
+
         // Initialization - END
 
         printDatabase();
     }
 
+
+    // =========== Preference Activity - START ===========
+    public void prefButtonClicked(View view) {
+        Intent prefActivityIntent = new Intent(this, SettingsActivity.class);
+        startActivity(prefActivityIntent);
+    }
+    // =========== Preference Activity - END ===========
+
+
+    // =========== SyncAdapter CRUD Api - START ===========
     /** Create a new dummy account for the sync adapter
      *
      * @param context The application context
@@ -102,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
 //    public void syncGetButtonClicked(View view) {
 //        Bundle settingsBundle = new Bundle();
 //        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
@@ -124,9 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 AUTHORITY,
                 settingsBundle);
     }
+    // =========== SyncAdapter CRUD Api - END ===========
 
 
-
+    // =========== ContentResolver-ContentProvider CRUD Api - START ===========
     public void testButtonClicked(View view){
 //        // Test 1 - to test the input-output function of Spinner
 //        String birthdayDay = String.valueOf(birthdayDaySpinner.getSelectedItem());
@@ -279,6 +294,8 @@ public class MainActivity extends AppCompatActivity {
 
         printDatabase();
     }
+    // =========== ContentResolver-ContentProvider CRUD Api - END ===========
+
 
 }
 
