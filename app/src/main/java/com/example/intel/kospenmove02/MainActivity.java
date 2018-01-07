@@ -132,19 +132,19 @@ public class MainActivity extends AppCompatActivity {
                 KospenBackupJobService.class);
         JobInfo.Builder jobinfoBuilder = null;
         jobinfoBuilder = new JobInfo.Builder(SYNC_JOB_ID, serviceName);
+        /* One-shot job */
 //        jobinfoBuilder.setPersisted(true)
 //                .setOverrideDeadline(TimeUnit.HOURS.toMillis(10))
 //                .setMinimumLatency(TimeUnit.SECONDS.toMillis(1))
 //                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
 //                .setRequiresDeviceIdle(false)
 //                .setExtras(bundle);
-
+        /* Periodic job */
         jobinfoBuilder.setPersisted(true)
                 .setPeriodic(TimeUnit.HOURS.toMillis(10))
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
                 .setRequiresDeviceIdle(false)
                 .setExtras(bundle);
-
         Log.i(JOB_SCHEDULE_TAG, "Retrieving JobScheduler");
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         mJobInfo = jobinfoBuilder.build();
