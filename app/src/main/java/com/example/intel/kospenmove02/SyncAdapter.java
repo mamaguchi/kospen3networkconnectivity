@@ -126,7 +126,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
 //                    }});
 
 
-//        // ========== StringRequest - GET version 2.0 ==========
+//        // ========== JsonArrayRequest - GET version 2.0 ==========
 //        JsonArrayRequest request = new JsonArrayRequest(
 //                Request.Method.GET,
 //                kospenusersUrl,
@@ -157,7 +157,7 @@ class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
 
-        // ========== StringRequest - POST ==========
+        // ========== JsonObjectRequest - POST ==========
         Map<String, String> params = new HashMap<>();
         params.put("name", "bellio7");
         JSONObject parameters = new JSONObject(params);

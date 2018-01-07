@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         if(mJobInfo!=null) {
 //            Toast.makeText(this, "Job exist: " + mJobInfo.getId(), Toast.LENGTH_SHORT).show();
             Log.i(JOB_SCHEDULE_TAG, "Job exist: " + mJobInfo.getId());
+            jobScheduler.cancel(mJobInfo.getId());
+            setupJob();
         } else {
 //            Toast.makeText(this, "No job. Creating new...", Toast.LENGTH_SHORT).show();
             Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
