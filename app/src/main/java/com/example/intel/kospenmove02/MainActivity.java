@@ -2,11 +2,15 @@ package com.example.intel.kospenmove02;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.PersistableBundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +25,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.intel.kospenmove02.accounts.GenericAccountService;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
     public static final String ACCOUNT = "dummyaccount";
     // Variable to hold an instance of Account
     Account mAccount;
+
+    // Job Schedule ID
+    public static final int SYNC_JOB_ID = "SyncJobService".hashCode();
+    // REST api endpoint to 'kospenusers'
+    private static final String SYNC_KOSPENPATH = "api/kospenusers";
+    // To hold a JobInfo instance
+    private static JobInfo mJobInfo = null;
+    // JobSchedule TAG
+    private static final String JOB_SCHEDULE_TAG = "SyncJobService";
 
 
     @Override
@@ -85,18 +100,83 @@ public class MainActivity extends AppCompatActivity {
         /* prefButton to show network-status activity */
         networkButton = (Button) findViewById(R.id.networkButtonId);
 
+        /* Set up job schedule */
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        mJobInfo = jobScheduler.getPendingJob(SYNC_JOB_ID);
+        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+        Log.i(JOB_SCHEDULE_TAG, "[Pre-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+        Log.i(JOB_SCHEDULE_TAG, "...");
+        if(mJobInfo!=null) {
+//            Toast.makeText(this, "Job exist: " + mJobInfo.getId(), Toast.LENGTH_SHORT).show();
+            Log.i(JOB_SCHEDULE_TAG, "Job exist: " + mJobInfo.getId());
+        } else {
+//            Toast.makeText(this, "No job. Creating new...", Toast.LENGTH_SHORT).show();
+            Log.i(JOB_SCHEDULE_TAG, "No job. Creating new...");
+            setupJob();
+        }
+
         // Initialization - END
 
         printDatabase();
     }
 
 
-    // =========== Preference Activity - START ===========
+    // =========== Setup JobInfo and Submit job using JobScheduler - START ===========
+    public void setupJob() {
+        Log.i(JOB_SCHEDULE_TAG, "Entering setupJob()");
+        PersistableBundle bundle = new PersistableBundle();
+        bundle.putString(SyncTask.SYNC_KOSPENPATH_KEY, SYNC_KOSPENPATH);
+
+        Log.i(JOB_SCHEDULE_TAG, "Creating JobInfo");
+        ComponentName serviceName = new ComponentName(this,
+                KospenBackupJobService.class);
+        JobInfo.Builder jobinfoBuilder = null;
+        jobinfoBuilder = new JobInfo.Builder(SYNC_JOB_ID, serviceName);
+//        jobinfoBuilder.setPersisted(true)
+//                .setOverrideDeadline(TimeUnit.HOURS.toMillis(10))
+//                .setMinimumLatency(TimeUnit.SECONDS.toMillis(1))
+//                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
+//                .setRequiresDeviceIdle(false)
+//                .setExtras(bundle);
+
+        jobinfoBuilder.setPersisted(true)
+                .setPeriodic(TimeUnit.HOURS.toMillis(10))
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_METERED)
+                .setRequiresDeviceIdle(false)
+                .setExtras(bundle);
+
+        Log.i(JOB_SCHEDULE_TAG, "Retrieving JobScheduler");
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        mJobInfo = jobinfoBuilder.build();
+        Log.i(JOB_SCHEDULE_TAG, "Minimum Period (in seconds): " + (mJobInfo.getMinPeriodMillis()/1000));
+        int result = jobScheduler.schedule(mJobInfo);
+
+        Log.i(JOB_SCHEDULE_TAG, "[Post-setup] Number of all pending jobs: " + jobScheduler.getAllPendingJobs().size());
+        Log.i(JOB_SCHEDULE_TAG, "[Post-setup] All pending jobs: " + jobScheduler.getAllPendingJobs());
+
+        if(result!= JobScheduler.RESULT_SUCCESS) {
+
+            Log.i(JOB_SCHEDULE_TAG, "Failed job schedule setup!");
+
+        } else if(result==JobScheduler.RESULT_SUCCESS) {
+
+            Log.i(JOB_SCHEDULE_TAG, "Successful job schedule setup!");
+
+        } else {
+
+            Log.i(JOB_SCHEDULE_TAG, "Error in job schedule setup!");
+
+        }
+    }
+    // =========== Setup JobInfo and Submit job using JobScheduler - END ===========
+
+
+    // =========== Network Activity - START ===========
     public void networkButtonClicked(View view) {
         Intent prefActivityIntent = new Intent(this, NetworkStatusActivity.class);
         startActivity(prefActivityIntent);
     }
-    // =========== Preference Activity - END ===========
+    // =========== Network Activity - END ===========
 
 
     // =========== Preference Activity - START ===========

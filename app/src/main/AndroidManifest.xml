@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- Required to allow application to access info about networks -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Required to allow JobScheduler to persist job over system reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -80,6 +82,11 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <service
+            android:name=".KospenBackupJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
 
         <receiver
             android:name=".NetworkReceiver"

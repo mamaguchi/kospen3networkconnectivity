@@ -10,7 +10,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-
+// ================================
+//
+//  Module to Check Network Status
+//
+// ================================
 public class NetworkActivity extends Activity {
 
     public static final String WIFI = "Wi-Fi";
