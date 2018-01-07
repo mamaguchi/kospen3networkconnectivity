@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.preference.PreferenceActivity;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Button syncPostButton;
     private Button syncDelButton;
     private Button prefButton;
+    private Button networkButton;
 
     private MyDBHandler dbHandler;
 
@@ -80,10 +82,21 @@ public class MainActivity extends AppCompatActivity {
         /* prefButton to show preference activity */
         prefButton = (Button) findViewById(R.id.prefButtonId);
 
+        /* prefButton to show network-status activity */
+        networkButton = (Button) findViewById(R.id.networkButtonId);
+
         // Initialization - END
 
         printDatabase();
     }
+
+
+    // =========== Preference Activity - START ===========
+    public void networkButtonClicked(View view) {
+        Intent prefActivityIntent = new Intent(this, NetworkStatusActivity.class);
+        startActivity(prefActivityIntent);
+    }
+    // =========== Preference Activity - END ===========
 
 
     // =========== Preference Activity - START ===========

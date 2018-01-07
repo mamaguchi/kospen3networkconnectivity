@@ -209,4 +209,14 @@
         android:onClick="prefButtonClicked"
         android:text="pref" />
 
+    <Button
+        android:id="@+id/networkButtonId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/syncPostButtonId"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="networkButtonClicked"
+        android:text="network" />
+
 </RelativeLayout>

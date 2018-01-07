@@ -33,7 +33,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        // TO DO: listener implementation
+        NetworkActivity.syncData = true;
     }
 
 
